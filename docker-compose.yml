@@ -1,0 +1,73 @@
+version: "3.7"
+services:
+  app:
+    build: .
+    image: muhsenmaqsudi/exchange
+    container_name: exchange_app
+    user: 1000:1000
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./:/srv
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+      CACHE_DRIVER: redis
+  db:
+    image: mysql:8
+    container_name: exchange_db
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "13306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+  server:
+    image: nginx:stable
+    container_name: exchange_server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/srv
+      - ./.docker/nginx:/etc/nginx/conf.d
+    depends_on:
+      - app
+      - db
+  redis:
+    container_name: exchange_redis
+    image: redis:alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redisdata:/data
+    restart: always
+    ports:
+      - "16379:6379"
+  composer:
+    image: composer:latest
+    container_name: exchange_composer
+    volumes:
+      - ./:/srv
+    working_dir: /srv
+  artisan:
+    image: muhsenmaqsudi/exchange
+    container_name: exchange_artisan
+    entrypoint: ["php", "/srv/artisan"]
+    user: 1000:1000
+    depends_on:
+      - db
+    volumes:
+      - ./:/srv
+    working_dir: /srv
+volumes:
+  dbdata:
+    driver: local
+  redisdata:
+    driver: local
