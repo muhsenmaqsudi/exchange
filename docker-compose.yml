@@ -15,6 +15,7 @@ services:
       DB_HOST: db
       REDIS_HOST: redis
       CACHE_DRIVER: redis
+      QUEUE_CONNECTION: redis
   db:
     image: mysql:8
     container_name: exchange_db

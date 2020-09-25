@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CurrencyValueUpdated;
 use App\Exceptions\UnableToCreateResourceException;
 use App\Http\Requests\StoreCurrencyRequest;
 use App\Repositories\Contracts\CurrencyRepository;
-use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
 {
@@ -32,6 +32,7 @@ class CurrencyController extends Controller
     {
         try {
             $currency = $this->currencyRepository->create($request->only(['name', 'code', 'value']));
+            event(new CurrencyValueUpdated($this->currencyRepository->ofActive()));
         } catch (\Exception $exception) {
             throw new UnableToCreateResourceException('for some reason we couldn\'t create your resource', '500');
         }

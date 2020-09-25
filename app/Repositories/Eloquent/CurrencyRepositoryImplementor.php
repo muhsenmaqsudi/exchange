@@ -12,4 +12,9 @@ class CurrencyRepositoryImplementor extends BaseRepository implements CurrencyRe
     {
         return Currency::class;
     }
+
+    public function ofActive()
+    {
+        return $this->model->ofActive();
+    }
 }
