@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Currency;
+use App\Models\Exchange;
 use App\Observers\CurrencyObserver;
+use App\Observers\ExchangeObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Currency::observe(CurrencyObserver::class);
+        Exchange::observe(ExchangeObserver::class);
     }
 }

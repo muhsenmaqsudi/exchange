@@ -45,3 +45,7 @@ Route::post('sanctum/token', function (Request $request) {
 Route::prefix('currencies')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [\App\Http\Controllers\CurrencyController::class, 'store']);
 });
+
+Route::prefix('exchanges')->group(function () {
+    Route::post('/', [\App\Http\Controllers\ExchangeController::class, 'store']);
+});
