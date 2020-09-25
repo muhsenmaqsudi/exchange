@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreExchangeRequest;
+use App\Http\Resources\ShowExchangeResource;
+use App\Http\Resources\StoreExchangeResource;
 use App\Repositories\Contracts\ExchangeRepository;
 use Illuminate\Http\Request;
 
@@ -31,13 +33,15 @@ class ExchangeController extends Controller
     {
         $result = $this->exchangeRepository->convertExchange($request->only(['source', 'destination', 'amount']));
 
-        return $this->exchangeRepository->create([
+        $exchange = $this->exchangeRepository->create([
             'email' => $request->input('email'),
             'source' => $request->input('source'),
             'destination' => $request->input('destination'),
             'amount' => $request->input('amount'),
             'result' => $result
         ]);
+
+        return StoreExchangeResource::make($exchange);
     }
 
     /**
@@ -47,6 +51,7 @@ class ExchangeController extends Controller
      */
     public function show(Request $request)
     {
-        return $this->exchangeRepository->findByField('tracking_code', $request->route('tracking_code'));
+        $exchange = $this->exchangeRepository->findByField('tracking_code', $request->route('tracking_code'))->first();
+        return ShowExchangeResource::make($exchange);
     }
 }

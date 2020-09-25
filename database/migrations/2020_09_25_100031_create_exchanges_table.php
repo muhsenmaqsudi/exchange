@@ -18,8 +18,8 @@ class CreateExchangesTable extends Migration
             $table->string('email');
             $table->enum('source', \App\Models\Currency::AVAILABLE_CURRENCY_CODES);
             $table->enum('destination', \App\Models\Currency::AVAILABLE_CURRENCY_CODES);
-            $table->bigInteger('amount');
-            $table->bigInteger('result');
+            $table->decimal('amount', '20', '2');
+            $table->decimal('result', '20', '2');
             $table->string('tracking_code', 32);
             $table->timestamps();
         });

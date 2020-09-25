@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\CurrencyValueUpdated;
 use App\Exceptions\UnableToCreateResourceException;
 use App\Http\Requests\StoreCurrencyRequest;
+use App\Http\Resources\CurrencyResource;
+use App\Http\Resources\StoreCurrencyResource;
 use App\Repositories\Contracts\CurrencyRepository;
 
 class CurrencyController extends Controller
@@ -25,7 +27,7 @@ class CurrencyController extends Controller
 
     /**
      * @param StoreCurrencyRequest $request
-     * @return mixed
+     * @return StoreCurrencyResource
      * @throws UnableToCreateResourceException
      */
     public function store(StoreCurrencyRequest $request)
@@ -36,6 +38,6 @@ class CurrencyController extends Controller
         } catch (\Exception $exception) {
             throw new UnableToCreateResourceException('for some reason we couldn\'t create your resource', '500');
         }
-        return $currency;
+        return StoreCurrencyResource::make($currency);
     }
 }

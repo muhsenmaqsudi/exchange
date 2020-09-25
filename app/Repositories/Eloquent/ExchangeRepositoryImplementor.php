@@ -31,7 +31,7 @@ class ExchangeRepositoryImplementor extends BaseRepository implements ExchangeRe
             if ($source_rate === $destination_rate) {
                 $result = $amount;
             } else {
-                $result = round((($amount * $source_rate) / $destination_rate), 3);
+                $result = ($amount * $source_rate) / $destination_rate;
             }
         } catch (\Exception $e) {
             return null;
