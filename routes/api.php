@@ -48,4 +48,5 @@ Route::prefix('currencies')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('exchanges')->group(function () {
     Route::post('/', [\App\Http\Controllers\ExchangeController::class, 'store']);
+    Route::get('{tracking_code}', [\App\Http\Controllers\ExchangeController::class, 'show']);
 });
