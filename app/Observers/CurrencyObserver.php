@@ -32,7 +32,7 @@ class CurrencyObserver
             ->ofActive()
             ->where('code', $currency->code)
             ->first();
-        if ($prevActiveCurrency) {
+        if ($prevActiveCurrency && $prevActiveCurrency->id !== $currency->id) {
             $prevActiveCurrency->active = false;
             $prevActiveCurrency->save();
         }
